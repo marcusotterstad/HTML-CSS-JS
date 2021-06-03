@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="style.css">
+        <style>
+            #tabell_html {
+                width: 100%;
+            }
+            table, th, td {
+                border: 1px solid black;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="topmeny">
+            <a href="oppgave1.html">Oppgave 1 - rektangler</a>
+            <a href="oppgave2.html">Oppgave 2 trapeser</a>
+          </div>
+        <div id="content" class="content">
+            <center>
+            <h1>Oppgave 2 - trapeser</h1>
+            <label for="Bunnlinje">Bunnlinje:</label>
+            <input type="number" min = 0 id="bunnlinje" value="Bunnlinje">
+            <br>
+            <label for="Topplinje">Topplinje:</label>
+            <input type="number" min = 0 id="topplinje" value="Topplinje">
+            <br>
+            <label for="Høyde">Høyde:</label>
+            <input type="number" min = 0 id="hoyde" value="Høyde">
+            <br>
+            <label for="Forskyvning">Forskyvning:</label>
+            <input type="number" min = 0 id="forskyvning" value="Forskyvning">
+            <br>
+            <input type="submit" value="Submit" onclick="lag_rad()">
+            </center>
+
+            <table id="tabell_html">
+                <tr>
+                    <th>Type firkant</th>
+                    <th>Bunnlinje</th>
+                    <th>Topplinje</th>
+                    <th>Høyde</th>
+                    <th>Forskyvning</th>
+                    <th>Areal</th>
+                </tr>
+            </table>
+            <br>
+        
+        </div>
+        <center><br><br><br><br><br>
+            <canvas id="myCanvas" width="1000" height="500" style="border:1px solid #000000; margin-bottom: 100px;"></canvas>
+        </center>
+        <script>
+            var oversikt = [
+                ["Kvadrat", 10, 10, 10, 0, 100],
+                ["Rektangel", 20, 20, 5, 0, 100],
+                ["Parallellogram", 20, 20, 10, 2, 200],
+                ["Trapes", 20, 10, 5, 2, 75],
+                ["Trapes", 5, 3, 10, 5, 40]
+            ];
+
+            oversikt.forEach(legg_til_rad);
+
+            function legg_til_rad (rad) {
+                var html_tabell = document.getElementById("tabell_html");
+                var content = document.getElementById("content");
+                content.append(html_tabell);
+                let rad_html = document.createElement("tr");
+
+                for(j = 0; j < 6; j++) {    // går gjennom alle ting i raden, og legger de inn i en td
+                    let maal = document.createElement("td");
+                    maal.innerHTML = rad[j];
+                    console.log(rad[j]);
+                    rad_html.append(maal);
+                
+                }
+                html_tabell.append(rad_html);
+            }
+
+            function lag_rad () {
+                // importerer brukerens verdier
+                let bunnlinje =  parseInt(document.getElementById("bunnlinje").value);
+                let topplinje =  parseInt(document.getElementById("topplinje").value);
+                let hoyde =  parseInt(document.getElementById("hoyde").value);
+                let forskyvning =  parseInt(document.getElementById("forskyvning").value);
+
+                // bruker formelen til å regne ut arealet
+                let areal = ((topplinje + bunnlinje)*hoyde)/2;
+
+                // lager alle conditions FØR jeg setter det inn i en if/else if/else for å få ryddig kode
+                let kvadrat_condition = (bunnlinje == topplinje) && (bunnlinje == hoyde) && (forskyvning == 0);
+                let rektangel_condition = (bunnlinje == topplinje) && (forskyvning == 0);
+                let parallellogram_condition = (bunnlinje == topplinje) && (forskyvning != 0);
+                let trapes_condition = (bunnlinje != topplinje);
+
+                //bestemmer hvilken type firkant det er
+                let firkant;
+                if(kvadrat_condition) {
+                    firkant = "Kvadrat";
+                }
+                else if(rektangel_condition) {
+                    firkant = "Rektangel";
+                }
+                else if(parallellogram_condition) {
+                    firkant = "Parallellogram";
+                }
+                else if(trapes_condition) {
+                    firkant = "Trapes";
+                } else {
+                    firkant = "Firkant udefinert";
+                }
+
+                // lager en tabellrad med informasjonen jeg nettopp har laget
+                let tabell_rad = [firkant, bunnlinje, topplinje, hoyde, forskyvning, areal];
+
+                if(bunnlinje && topplinje && hoyde && forskyvning) {
+                    // legger den til i tabellen
+                    legg_til_rad(tabell_rad);
+                }
+
+                tegn_figur();
+            }
+            
+            function endre_rad () {
+                let bunnlinje =  parseInt(document.getElementById("bunnlinje").value);
+                let topplinje =  parseInt(document.getElementById("topplinje").value);
+                let hoyde =  parseInt(document.getElementById("hoyde").value);
+                let forskyvning =  parseInt(document.getElementById("forskyvning").value);
+
+
+
+            }
+
+            // rekker ikke mer, men viser hva jeg hadde gjort hvis jeg hadde rukket det
+
+            //html_tabell.forEach(lag_eventlistener);
+
+            let tegn_figur = function() {
+                let bunnlinje =  parseInt(document.getElementById("bunnlinje").value)*50;
+                let topplinje =  parseInt(document.getElementById("topplinje").value)*50;
+                let hoyde =  parseInt(document.getElementById("hoyde").value)*50;
+                let forskyvning =  parseInt(document.getElementById("forskyvning").value)*50;
+
+                // lager en funksjon som hadde valgt den raden, og tegner figuren ut ifra informasjonen i raden
+                var c = document.getElementById("myCanvas");
+                var ctx = c.getContext("2d");
+                ctx.moveTo(forskyvning, 0);     // flytter cursor til A (som vist på "til sensor" dokumentet)
+                ctx.lineTo(0, hoyde);           // lager en linje fra A til B
+                ctx.stroke();
+                ctx.lineTo(bunnlinje, hoyde);     // lager linje fra B bort til C
+                ctx.stroke();
+                ctx.lineTo(forskyvning + topplinje, 0); // lager linje fra C til D
+                ctx.stroke();
+                ctx.lineTo(forskyvning, 0); // lager linje fra D til A
+                ctx.stroke();
+            }
+            // hadde satt en eventlistener på hver rad, sånn at man kan velge raden og endre informasjonen og tegne figuren
+            function lag_eventlistener (element) {
+                element.addEventListener("click", tegn_figur);
+            }
+
+        </script>
+    </body>
+</html>

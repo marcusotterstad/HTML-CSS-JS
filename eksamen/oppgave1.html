@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="style.css">    <!--Her linker jeg til et stylesheet som er felles for alle sidene, dette gjør programmene like i oppsett og farger.-->
+        <style>
+            #rektangel {
+                background-color: red;
+                
+            }
+
+        </style>
+    </head>
+    <body>
+        <!--En toppmeny mener jeg er oversiktlig-->
+        <div class="topmeny">
+            <a href="oppgave1.html">Oppgave 1 - rektangler</a>
+            <a href="oppgave2.html">Oppgave 2 trapeser</a>
+          </div>
+
+        <div class="content">
+            <center>
+            <h1>Oppgave 1 - rektangel</h1>
+
+
+            <label for="lengde">Vennligst skriv inn en lengde fra og med 1 til og med 9:</label>
+            <input type="number" id="lengde" value="lengde">
+            <br>
+            <input type="submit" value="Submit" onclick="lag_rektangel()">
+            <br>
+            <p id="hoyde_p"></p>
+            <p id="areal_p"></p>
+            <div id="rektangel"></div>
+
+            <p id="error_message"></p>
+
+            </center>
+        </div>
+        <audio><source id="lyd" src="/static/klokke_lyd_redigert.mp3" type="audio/mp3"></audio>
+
+        <script>
+
+            var forrige_lengde;
+
+
+            // denne funksjonen animerer rektanglet og viser høyde og areal
+            let lag_rektangel = function() {
+                let lyd = document.getElementById("lyd");                           // importerer lyden
+                let lengde = parseInt(document.getElementById("lengde").value);     // importerer brukeren sin lengde
+                let rektangel = document.getElementById("rektangel");     
+                const omkrets = 20;     // her setter jeg omkretsen til å være en const, siden denne variablen ikke skal endres i løpet av funksjonen
+                
+                let hoyde = 10 - lengde;    // regner ut høyden
+
+                let hoyde_p = document.getElementById("hoyde_p");
+                hoyde_p.innerHTML = "Høyde: " + hoyde;
+                let areal_p = document.getElementById("areal_p");
+                areal_p.innerHTML = "Areal: " + (hoyde * lengde);
+
+                // viser alle objektene på starten untatt errors
+                let error_message = document.getElementById("error_message");
+                error_message.innerHTML = "Vennligst oppgi et tall fra og med 1 til og med 9, og oppgi en annen verdi enn den forrige";
+                rektangel.hidden = false;
+                hoyde_p.hidden = false;
+                areal_p.hidden = false;
+                error_message.hidden = true;
+
+                // sjekker alle errors
+                if((lengde < 1) || (lengde > 9) || (lengde == forrige_lengde)) {    //sjekker om det er oppgitt en gyldig lengde
+                    error_message.hidden = false;
+                    rektangel.hidden = true;
+                    hoyde_p.hidden = true;
+                    areal_p.hidden = true;
+                    return;
+                }
+                forrige_lengde = lengde;    // her gjør jeg den forrige lengden til den lengden nå, slik at hvis man neste gang kjører programmet med samme lengde, blir det ikke gyldig
+
+
+                // regningen begynner her 
+                
+
+                let hoyde_piksler = hoyde*50;
+                let lengde_piksler = lengde*50; // 1cm = 50 piksler
+
+                rektangel.style.width = lengde_piksler + "px";
+                rektangel.style.height = hoyde_piksler + "px";
+
+                rektangel.animate([
+                    {width: "0px", height: "0px"},
+                    {width: lengde_piksler+ "px", height: hoyde_piksler+ "px"}],
+                    {duration: 2000});
+                lyd.play();
+
+            }
+        </script>
+    </body>
+</html>

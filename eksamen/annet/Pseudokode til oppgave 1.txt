@@ -1,0 +1,14 @@
+var input = math.floor(bruker sin lengde)
+var størrelse = 20;
+
+if(input er mellom 1 og 9 og samme lengden ikke er oppgitt før){
+
+    høyde = 10 - bredde
+    areal = høyde * bredde
+    bredde_piksler = bredde*50
+    høyde_piksler = høyde*50
+
+    animer og spill av lyd
+} else {
+    "vennligst oppgi en gyldig lengde eller oppgi en annen lengde"
+}
