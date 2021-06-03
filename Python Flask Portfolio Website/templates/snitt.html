@@ -1,0 +1,14 @@
+{% extends "index.html" %}
+
+{% block content %}
+    <h1>All final grades</h1>
+    <h2> Average: {{ avg["Karakter"].mean() }}</h2>
+    <table style="width:100%">
+    {% for row in avg.itertuples() %}
+        <tr>
+            <th>{{row.Fag}}</th>
+            <th>{{row.Karakter}}</th>
+        </tr>
+    {% endfor %}
+    </table>
+{% endblock %}
